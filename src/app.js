@@ -10,6 +10,7 @@ import {fetchData,fetchDailyData} from './api/index'
 class App extends React.Component {
   state={
          data:{},
+         country:''
   }
   async componentDidMount(){
     const fetchedData=await fetchData();
@@ -17,15 +18,22 @@ class App extends React.Component {
     const fetchdaily=fetchDailyData();
     console.log(fetchdaily)
   }
+
+  handleCountryChange = async (country) => {
+    const data = await fetchData(country);
+
+    this.setState({ data, country: country });
+  }
+
     render() {
-      const {data}=this.state
+      const {data,country}=this.state
         return (
             <div className={style.container}>
               <Cards data={data}/>
               <br></br>
-              <CountryPicker/>
+              <CountryPicker handleCountryChange={this.handleCountryChange}/>
               <br></br>
-              <Chart data={data}/>
+              <Chart data={data} country={country}/>
             </div>
           )
 
